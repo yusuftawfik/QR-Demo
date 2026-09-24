@@ -31,7 +31,8 @@ a { color: inherit; }
 .app-shell {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100dvh;
+  min-height: 100vh;
+  min-height: 100svh; /* svh, not dvh: dvh resizes as the mobile toolbar shows/hides and re-lays-out the page mid-scroll */
   display: flex;
   flex-direction: column;
   background: var(--bg);
@@ -94,9 +95,16 @@ a { color: inherit; }
    480px app shell. */
 .bottomnav {
   position: fixed;
-  left: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto; /* centre without a transform, which can shimmy when the mobile toolbar resizes */
   bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%);
+  /* Own compositor layer so the blur isn't repainted (and doesn't jitter)
+     while content scrolls or animates behind it. */
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   z-index: 50;
   display: flex;
   align-items: center;
