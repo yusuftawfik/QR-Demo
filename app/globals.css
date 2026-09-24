@@ -84,7 +84,7 @@ a { color: inherit; }
 .stepper b { font-size: 12px; min-width: 12px; text-align: center; }
 .stepper-overlay { position: absolute; top: -16px; right: -16px; }
 
-.cart-bar { position: sticky; bottom: calc(70px + env(safe-area-inset-bottom, 0px)); margin-top: 20px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 400; font-size: 12px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
+.cart-bar { position: sticky; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); margin-top: 20px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 400; font-size: 12px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
 .cart-bar:active { transform: scale(.97); }
 
 /* Floating glass pill (Figma Frames 87/88/89: 186x38, 24px radius, 1px
@@ -95,32 +95,40 @@ a { color: inherit; }
 .bottomnav {
   position: fixed;
   left: 50%;
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
   z-index: 50;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 186px;
-  height: 38px;
-  padding: 0 18px;
-  border: 1px solid #d9d9d9;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.35);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
+  justify-content: space-around;
+  /* Sized up from the Figma 186x38 so the tap targets are thumb-friendly on
+     phones; the width shrinks to fit narrow screens and caps on wider ones. */
+  width: min(300px, calc(100vw - 40px));
+  height: 60px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: var(--r-pill);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.18) 100%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
-    0 8px 24px -8px rgba(0, 0, 0, 0.25);
+    0 0 0 1px rgba(0, 0, 0, 0.06), /* hairline outer edge so the glass reads on a light page */
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 0 18px rgba(255, 255, 255, 0.25),
+    0 12px 32px -10px rgba(0, 0, 0, 0.3);
 }
-.navlink { background: none; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 42px; height: 31px; color: var(--ink-soft); position: relative; transition: color .15s ease, transform .15s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+/* Specular sheen across the top half of the pill. */
+.bottomnav::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%); pointer-events: none; }
+.navlink { flex: 1; min-width: 48px; height: 100%; background: none; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; color: var(--ink-soft); position: relative; isolation: isolate; transition: color .15s ease, transform .15s ease; outline: none; -webkit-tap-highlight-color: transparent; }
 .navlink:focus,
 .navlink:focus-visible { outline: none; box-shadow: none; }
 .navlink:active { transform: scale(.9); }
 .navlink.active { color: var(--ink); }
-.badge { position: absolute; top: -4px; right: -2px; background: var(--ink); color: var(--bg); font-size: 9px; font-weight: 400; border-radius: 10px; min-width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+/* Active tab sits on its own little frosted chip. */
+.navlink::before { content: ''; position: absolute; inset: 7px 6px; z-index: -1; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0); transition: background .2s ease, box-shadow .2s ease; }
+.navlink.active::before { background: rgba(255, 255, 255, 0.6); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 2px 8px -2px rgba(0, 0, 0, 0.15); }
+.badge { position: absolute; top: 8px; right: calc(50% - 22px); background: var(--ink); color: var(--bg); font-size: 11px; font-weight: 400; border-radius: 10px; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
 /* Browsers without backdrop-filter get a more opaque fill so icons stay legible. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .bottomnav { background: rgba(255, 255, 255, 0.92); }

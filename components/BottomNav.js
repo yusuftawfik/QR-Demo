@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, ConciergeBell, Smartphone } from 'lucide-react';
+import { Home, ConciergeBell, HandPlatter } from 'lucide-react';
 import { useCart } from './CartContext';
 import { categories } from '@/lib/menu-data';
 
@@ -51,7 +51,7 @@ export default function BottomNav() {
   const tabs = [
     { key: 'home', href: '/', label: 'Home', Icon: Home },
     { key: 'menu', href: `/menu/${lastCategory}`, label: 'Menu', Icon: ConciergeBell },
-    { key: 'order', href: '/cart', label: 'Your order', Icon: Smartphone },
+    { key: 'order', href: '/cart', label: 'Your order', Icon: HandPlatter },
   ];
 
   return (
@@ -66,7 +66,7 @@ export default function BottomNav() {
             aria-label={label}
             aria-current={isActive ? 'page' : undefined}
           >
-            <Icon size={22} strokeWidth={isActive ? 2.25 : 1.5} />
+            <Icon size={26} strokeWidth={isActive ? 2.25 : 1.5} />
             {key === 'order' && count > 0 && <span className="badge">{count}</span>}
           </Link>
         );
