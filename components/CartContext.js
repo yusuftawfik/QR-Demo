@@ -11,6 +11,7 @@ export const REVIEW_POINTS = 100;
 export function CartProvider({ children }) {
   const [table, setTable] = useState('05');
   const [cart, setCart] = useState({}); // { itemId: qty }
+  const [notes, setNotes] = useState({}); // { itemId: note for the kitchen }
   const [payment, setPayment] = useState(null);
   const [lastOrder, setLastOrder] = useState(null);
   const [points, setPoints] = useState(240);
@@ -42,15 +43,20 @@ export function CartProvider({ children }) {
 
   function clearCart() {
     setCart({});
+    setNotes({});
     setPayment(null);
+  }
+
+  function setNote(id, text) {
+    setNotes((n) => ({ ...n, [id]: text }));
   }
 
   const lines = useMemo(
     () =>
       Object.entries(cart)
-        .map(([id, qty]) => ({ item: getItem(id), qty }))
+        .map(([id, qty]) => ({ item: getItem(id), qty, note: (notes[id] || '').trim() }))
         .filter((l) => l.item),
-    [cart]
+    [cart, notes]
   );
   const subtotal = useMemo(() => lines.reduce((s, l) => s + l.item.price * l.qty, 0), [lines]);
   const count = useMemo(() => lines.reduce((s, l) => s + l.qty, 0), [lines]);
@@ -85,6 +91,8 @@ export function CartProvider({ children }) {
     setPayment,
     addItem,
     changeQty,
+    notes,
+    setNote,
     clearCart,
     placeOrder,
     lastOrder,

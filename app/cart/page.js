@@ -13,7 +13,7 @@ const PAYMENT_METHODS = [
 ];
 
 export default function CartPage() {
-  const { lines, subtotal, payment, setPayment, changeQty, placeOrder } = useCart();
+  const { lines, subtotal, payment, setPayment, changeQty, notes, setNote, placeOrder } = useCart();
   const router = useRouter();
 
   function handlePlaceOrder() {
@@ -23,12 +23,10 @@ export default function CartPage() {
 
   return (
     <>
-      <div className="backrow">
-        <Link href="/" className="backbtn" aria-label="Back to menu">
-          <ArrowLeft size={18} />
-        </Link>
-        <div className="h1">Your Order</div>
-      </div>
+      <Link href="/" className="backbtn" aria-label="Back to menu" style={{ marginBottom: 22 }}>
+        <ArrowLeft size={18} />
+      </Link>
+      <div className="h1" style={{ marginBottom: 20 }}>Your Order</div>
 
       {lines.length === 0 ? (
         <div className="empty-state">
@@ -41,35 +39,50 @@ export default function CartPage() {
           {lines.map(({ item, qty }) => {
             const ItemIcon = Icons[item.icon] || Icons.UtensilsCrossed;
             return (
-              <div className="line-item" key={item.id}>
-                <div className="thumb-sm">
-                  <ItemIcon size={20} strokeWidth={1.5} />
+              <div className="cart-card" key={item.id}>
+                <div className="cart-thumb">
+                  <ItemIcon size={32} strokeWidth={1.5} />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div className="li-name">{item.name}</div>
-                  <div className="li-sub">${item.price.toFixed(2)} each</div>
-                </div>
-                <div className="stepper">
-                  <button onClick={() => changeQty(item.id, -1)} aria-label={`Remove one ${item.name}`}>
-                    <Minus size={14} />
-                  </button>
-                  <b>{qty}</b>
-                  <button onClick={() => changeQty(item.id, 1)} aria-label={`Add one ${item.name}`}>
-                    <Plus size={14} />
-                  </button>
+                <div className="cart-body">
+                  <div className="cart-top">
+                    <div className="cart-titles">
+                      <div className="cart-name">{item.name}</div>
+                      <div className="cart-desc">{item.description || 'Description'}</div>
+                    </div>
+                    <div className="cart-side">
+                      <span>${(item.price * qty).toFixed(2)}</span>
+                      <div className="stepper">
+                        <button onClick={() => changeQty(item.id, -1)} aria-label={`Remove one ${item.name}`}>
+                          <Minus size={14} />
+                        </button>
+                        <b>{qty}</b>
+                        <button onClick={() => changeQty(item.id, 1)} aria-label={`Add one ${item.name}`}>
+                          <Plus size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <textarea
+                    className="cart-note"
+                    placeholder="Note"
+                    aria-label={`Note for ${item.name}`}
+                    maxLength={140}
+                    value={notes[item.id] || ''}
+                    onChange={(e) => setNote(item.id, e.target.value)}
+                  />
                 </div>
               </div>
             );
           })}
 
-          <div className="section-title" style={{ marginTop: 22 }}>Pay with</div>
-          <div className="paymethods">
+          <div className="paymethods" role="group" aria-label="Payment method">
             {PAYMENT_METHODS.map(({ id, label, Icon, iconClass }) => (
               <div
                 key={id}
                 className={`opt ${payment === label ? 'sel' : ''}`}
                 onClick={() => setPayment(label)}
                 role="button"
+                aria-pressed={payment === label}
                 tabIndex={0}
               >
                 {Icon ? (
@@ -82,12 +95,6 @@ export default function CartPage() {
             ))}
           </div>
 
-          <div className="summary-row total">
-            <span>Total</span>
-            <span>${subtotal.toFixed(2)}</span>
-          </div>
-
-          <div style={{ height: 16 }} />
           <button className="btn-primary" disabled={!payment} onClick={handlePlaceOrder}>
             {payment ? `Place Order · $${subtotal.toFixed(2)}` : 'Select a payment method'}
           </button>

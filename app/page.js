@@ -15,7 +15,7 @@ export default function HomePage() {
       <SearchBar />
       <div className="section-title">Our Cuisines</div>
       <CategoryPills />
-      <div className="section-title">Highly Rated</div>
+      <div className="section-title section-gap">Highly Rated</div>
       <div className="grid">
         {highlyRated.map((item, i) => (
           <Reveal key={item.id} index={i}>

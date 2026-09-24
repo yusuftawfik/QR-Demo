@@ -27,10 +27,13 @@ export default function ReceiptPage() {
       </div>
 
       <div className="receipt">
-        {lastOrder.lines.map(({ item, qty }) => (
-          <div className="rrow" key={item.id}>
-            <span>{qty}× {item.name}</span>
-            <b>${(item.price * qty).toFixed(2)}</b>
+        {lastOrder.lines.map(({ item, qty, note }) => (
+          <div key={item.id}>
+            <div className="rrow">
+              <span>{qty}× {item.name}</span>
+              <b>${(item.price * qty).toFixed(2)}</b>
+            </div>
+            {note && <div className="li-sub" style={{ marginTop: -4, paddingBottom: 4 }}>Note: {note}</div>}
           </div>
         ))}
         <div className="rrow" style={{ borderTop: '1px solid var(--line)', marginTop: 8, paddingTop: 10, fontSize: 14 }}>
