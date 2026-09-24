@@ -12,7 +12,7 @@ export default function CartBar() {
       <span>
         {count} {count === 1 ? 'item' : 'items'} · ${subtotal.toFixed(2)}
       </span>
-      <span>View Order →</span>
+      <span>View Order</span>
     </Link>
   );
 }

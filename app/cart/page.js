@@ -8,7 +8,7 @@ import { useCart } from '@/components/CartContext';
 
 const PAYMENT_METHODS = [
   { id: 'visa', label: 'Visa', Icon: CreditCard },
-  { id: 'mastercard', label: 'Mastercard', Icon: CreditCard },
+  { id: 'apple-pay', label: 'Apple Pay', iconClass: 'fi fi-brands-apple-pay' },
   { id: 'cash', label: 'Cash', Icon: Banknote },
 ];
 
@@ -64,7 +64,7 @@ export default function CartPage() {
 
           <div className="section-title" style={{ marginTop: 22 }}>Pay with</div>
           <div className="paymethods">
-            {PAYMENT_METHODS.map(({ id, label, Icon }) => (
+            {PAYMENT_METHODS.map(({ id, label, Icon, iconClass }) => (
               <div
                 key={id}
                 className={`opt ${payment === label ? 'sel' : ''}`}
@@ -72,7 +72,11 @@ export default function CartPage() {
                 role="button"
                 tabIndex={0}
               >
-                <Icon size={20} strokeWidth={1.5} />
+                {Icon ? (
+                  <Icon size={20} strokeWidth={1.5} />
+                ) : (
+                  <i className={`${iconClass} opt-fonticon`} aria-hidden="true" />
+                )}
                 {label}
               </div>
             ))}

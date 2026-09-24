@@ -14,31 +14,18 @@
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #121212;
-    --card: #1b1b1b;
-    --line: #2e2e2e;
-    --ink: #f2f2f2;
-    --ink-soft: #9c9c9c;
-    --fill: #2a2a2a;
-    --fill-dark: #3c3c3c;
-  }
-}
-:root[data-theme='dark'] {
-  --bg: #121212;
-  --card: #1b1b1b;
-  --line: #2e2e2e;
-  --ink: #f2f2f2;
-  --ink-soft: #9c9c9c;
-  --fill: #2a2a2a;
-  --fill-dark: #3c3c3c;
-}
+/* Locked to light mode on purpose — grayscale but never dark, to match
+   the Figma wireframe's light background regardless of system theme. */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 html { scroll-padding-top: env(safe-area-inset-top, 0px); }
-body { background: var(--bg); color: var(--ink); }
+/* Typography mirrors the Figma file exactly: Inter only, weight 400 everywhere
+   except the table badge (600), on a 12 / 20 / 32px scale. Bold and extra-bold
+   are intentionally not used. Elements below default to 12px unless noted. */
+body { background: var(--bg); color: var(--ink); font-size: 12px; font-weight: 400; }
+b, strong { font-weight: 400; }
+button, input, textarea { font-family: inherit; font-size: inherit; font-weight: inherit; }
 a { color: inherit; }
 
 .app-shell {
@@ -53,76 +40,133 @@ a { color: inherit; }
 .app-main { flex: 1; padding: 20px 18px 110px; }
 
 .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-.avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--fill-dark); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--ink); }
+.avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--fill-dark); display: flex; align-items: center; justify-content: center; font-weight: 400; color: var(--ink); }
 .who { flex: 1; }
-.who b { display: block; font-size: 14px; }
+.who b { display: block; font-size: 12px; }
 .who span { font-size: 12px; color: var(--ink-soft); }
-.table-pill { background: var(--ink); color: var(--bg); font-size: 11px; font-weight: 600; padding: 6px 12px; border-radius: var(--r-pill); }
+.table-pill { background: var(--ink); color: var(--bg); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: var(--r-pill); }
 
-.search { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-pill); padding: 12px 16px; color: var(--ink-soft); font-size: 13px; margin-bottom: 22px; }
+.search { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-pill); padding: 12px 16px; color: var(--ink-soft); font-size: 12px; margin-bottom: 22px; }
 
-.section-title { font-size: 18px; font-weight: 700; margin: 4px 0 12px; }
+.search-input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; color: var(--ink); font-size: 12px; -webkit-appearance: none; appearance: none; }
+.search-input::placeholder { color: var(--ink-soft); opacity: 1; }
+.search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.search-results { margin-bottom: 22px; }
+
+.section-title { font-size: 20px; font-weight: 400; margin: 4px 0 12px; }
 
 .pills { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 16px; }
 .pill { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; }
 .pill .circ { width: 58px; height: 58px; border-radius: 50%; background: var(--card); border: 1.5px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--ink); transition: transform .15s ease, border-color .15s ease; }
 .pill .circ:active { transform: scale(.93); }
-.pill span:last-child { font-size: 11px; color: var(--ink-soft); font-weight: 500; }
+.pill span:last-child { font-size: 12px; color: var(--ink-soft); font-weight: 400; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-.dish { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; transition: transform .15s ease; }
+.dish { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); position: relative; transition: transform .15s ease; }
 .dish:active { transform: scale(.97); }
-.dish .thumb { height: 88px; background: var(--fill); display: flex; align-items: center; justify-content: center; color: var(--ink-soft); }
+.dish .thumb { height: 124px; background: var(--fill); display: flex; align-items: center; justify-content: center; color: var(--ink-soft); border-radius: var(--r-md) var(--r-md) 0 0; overflow: hidden; }
 .dish .info { padding: 10px; }
-.dish .name { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-.dish .row { display: flex; justify-content: space-between; align-items: center; }
-.dish .price { font-size: 13px; font-weight: 700; }
+.dish .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.dish .name { font-size: 12px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.dish .price { font-size: 12px; font-weight: 400; flex-shrink: 0; }
+.dish .desc { font-size: 12px; color: var(--ink-soft); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .icon-btn { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--bg); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .15s ease; }
 .icon-btn:active { transform: scale(.85); }
+.icon-btn-overlay { position: absolute; top: -16px; right: -16px; }
 
 .stepper { display: flex; align-items: center; gap: 8px; background: var(--ink); color: var(--bg); border-radius: var(--r-pill); padding: 4px 8px; }
 .stepper button { background: none; border: none; color: inherit; display: flex; cursor: pointer; padding: 2px; }
 .stepper b { font-size: 12px; min-width: 12px; text-align: center; }
+.stepper-overlay { position: absolute; top: -16px; right: -16px; }
 
-.cart-bar { position: sticky; bottom: 16px; margin-top: 20px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 600; font-size: 13px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
+.cart-bar { position: sticky; bottom: calc(70px + env(safe-area-inset-bottom, 0px)); margin-top: 20px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 400; font-size: 12px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
 .cart-bar:active { transform: scale(.97); }
 
-.bottomnav { display: flex; justify-content: space-around; align-items: center; padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--card); }
-.navlink { background: none; border: none; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(--ink-soft); position: relative; padding: 4px 16px; }
+/* Floating glass pill (Figma Frames 87/88/89: 186x38, 24px radius, 1px
+   #d9d9d9 border, Glass effect). Figma's Glass effect has no CSS twin, so it's
+   approximated with a blurred backdrop, a translucent white fill and a soft
+   inner highlight. Pinned to the bottom of the viewport, centred inside the
+   480px app shell. */
+.bottomnav {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 186px;
+  height: 38px;
+  padding: 0 18px;
+  border: 1px solid #d9d9d9;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+    0 8px 24px -8px rgba(0, 0, 0, 0.25);
+}
+.navlink { background: none; border: none; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 42px; height: 31px; color: var(--ink-soft); position: relative; transition: color .15s ease, transform .15s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+.navlink:focus,
+.navlink:focus-visible { outline: none; box-shadow: none; }
+.navlink:active { transform: scale(.9); }
 .navlink.active { color: var(--ink); }
-.badge { position: absolute; top: -3px; right: 8px; background: var(--ink); color: var(--bg); font-size: 9px; font-weight: 700; border-radius: 10px; min-width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+.badge { position: absolute; top: -4px; right: -2px; background: var(--ink); color: var(--bg); font-size: 9px; font-weight: 400; border-radius: 10px; min-width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+/* Browsers without backdrop-filter get a more opaque fill so icons stay legible. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .bottomnav { background: rgba(255, 255, 255, 0.92); }
+}
 
 .backrow { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 .backbtn { width: 36px; height: 36px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--ink); text-decoration: none; }
-.h1 { font-size: 20px; font-weight: 800; }
+.h1 { font-size: 32px; font-weight: 400; }
 
 .line-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); gap: 12px; }
 .thumb-sm { width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--fill); display: flex; align-items: center; justify-content: center; color: var(--ink-soft); flex-shrink: 0; }
-.li-name { font-size: 13px; font-weight: 600; }
-.li-sub { font-size: 11px; color: var(--ink-soft); }
+.li-name { font-size: 12px; font-weight: 400; }
+.li-sub { font-size: 12px; color: var(--ink-soft); }
 
 .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-soft); line-height: 1.8; }
-.empty-state a { color: var(--ink); font-weight: 700; text-decoration: underline; }
+.empty-state a { color: var(--ink); font-weight: 400; text-decoration: underline; }
 
 .paymethods { display: flex; gap: 10px; margin: 16px 0; }
-.paymethods .opt { flex: 1; border: 1.5px solid var(--line); border-radius: var(--r-sm); padding: 14px 6px; text-align: center; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--card); color: var(--ink); transition: border-color .15s ease, background .15s ease; }
+.paymethods .opt { flex: 1; border: 1.5px solid var(--line); border-radius: var(--r-sm); padding: 14px 6px; text-align: center; font-size: 12px; font-weight: 400; cursor: pointer; background: var(--card); color: var(--ink); transition: border-color .15s ease, background .15s ease; }
 .paymethods .opt svg { display: block; margin: 0 auto 6px; }
+.paymethods .opt .opt-fonticon { display: block; margin: 0 auto 6px; font-size: 20px; line-height: 20px; height: 20px; }
 .paymethods .opt.sel { border-color: var(--ink); background: var(--fill); }
 
-.summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; color: var(--ink-soft); }
-.summary-row.total { color: var(--ink); font-weight: 800; font-size: 16px; border-top: 1px solid var(--line); margin-top: 8px; padding-top: 14px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 12px; padding: 7px 0; color: var(--ink-soft); }
+.summary-row.total { color: var(--ink); font-weight: 400; font-size: 20px; border-top: 1px solid var(--line); margin-top: 8px; padding-top: 14px; }
 
-.btn-primary { width: 100%; background: var(--ink); color: var(--bg); border: none; border-radius: 20px; padding: 16px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .15s ease, opacity .15s ease; }
+.btn-primary { width: 100%; background: var(--ink); color: var(--bg); border: none; border-radius: 20px; padding: 16px; font-size: 20px; font-weight: 400; cursor: pointer; transition: transform .15s ease, opacity .15s ease; }
 .btn-primary:active { transform: scale(.97); }
 .btn-primary:disabled { opacity: .35; cursor: not-allowed; }
 
 .receipt { background: var(--card); border: 1.5px dashed var(--line); border-radius: var(--r-md); padding: 20px; margin-bottom: 20px; }
-.receipt .rrow { display: flex; justify-content: space-between; font-size: 12.5px; padding: 7px 0; color: var(--ink-soft); }
-.receipt .rrow b { color: var(--ink); font-weight: 600; }
+.receipt .rrow { display: flex; justify-content: space-between; font-size: 12px; padding: 7px 0; color: var(--ink-soft); }
+.receipt .rrow b { color: var(--ink); font-weight: 400; }
 .check-circ { width: 64px; height: 64px; border-radius: 50%; background: var(--fill); color: var(--ink); display: flex; align-items: center; justify-content: center; margin: 6px auto 16px; }
 .staff-note { background: var(--fill); border-radius: var(--r-sm); padding: 14px 16px; font-size: 12px; color: var(--ink); display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
+
+/* Rate us (/rate) */
+.rate-stars { display: flex; justify-content: center; gap: 15px; margin: 8px 0 26px; }
+.star-btn { background: none; border: none; padding: 0; display: flex; cursor: pointer; color: var(--fill-dark); transition: transform .15s ease, color .15s ease; -webkit-tap-highlight-color: transparent; outline: none; }
+.star-btn svg { fill: currentColor; }
+.star-btn.on { color: var(--ink); }
+.star-btn:active { transform: scale(.88); }
+.star-btn:focus-visible { box-shadow: 0 0 0 2px var(--ink); border-radius: 8px; }
+.review-input { display: block; width: 100%; min-height: 178px; resize: none; border: 1px solid var(--line); background: var(--card); border-radius: var(--r-lg); padding: 13px 12px; color: var(--ink); outline: none; font-size: 12px; line-height: 1.5; margin-bottom: 20px; transition: border-color .15s ease; }
+.review-input::placeholder { color: var(--ink-soft); opacity: 1; }
+.review-input:focus { border-color: var(--ink); }
+.tier-note { font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; }
+.tiers { border: 1px solid var(--line); background: var(--card); border-radius: var(--r-lg); padding: 14px 16px; }
+.tier { display: flex; justify-content: space-between; font-size: 20px; padding: 3px 0; }
 
 @keyframes skeleton-pulse {
   0%, 100% { opacity: 1; }

@@ -5,11 +5,16 @@ import { getItem } from '@/lib/menu-data';
 
 const CartContext = createContext(null);
 
+// Points awarded for leaving a review (Rate us screen).
+export const REVIEW_POINTS = 100;
+
 export function CartProvider({ children }) {
   const [table, setTable] = useState('05');
   const [cart, setCart] = useState({}); // { itemId: qty }
   const [payment, setPayment] = useState(null);
   const [lastOrder, setLastOrder] = useState(null);
+  const [points, setPoints] = useState(240);
+  const [reviewed, setReviewed] = useState(false);
 
   // Read ?table=07 from the URL client-side (plain window.location rather
   // than next/navigation's useSearchParams, which would force this whole
@@ -60,8 +65,15 @@ export function CartProvider({ children }) {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
     setLastOrder(order);
+    setReviewed(false); // each order can earn one review reward
     clearCart();
     return order;
+  }
+
+  function claimReview() {
+    if (reviewed) return;
+    setPoints((p) => p + REVIEW_POINTS);
+    setReviewed(true);
   }
 
   const value = {
@@ -77,6 +89,9 @@ export function CartProvider({ children }) {
     placeOrder,
     lastOrder,
     table,
+    points,
+    reviewed,
+    claimReview,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

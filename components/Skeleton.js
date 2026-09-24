@@ -15,12 +15,11 @@ export function SkelBox({ width, height, radius = 'var(--r-sm)', circle = false,
 export function DishCardSkeleton() {
   return (
     <div className="dish">
-      <SkelBox width="100%" height={88} radius={0} />
+      <SkelBox width="100%" height={124} radius={0} />
       <div className="info">
-        <SkelBox width="70%" height={12} style={{ marginBottom: 10 }} />
         <div className="row">
-          <SkelBox width={36} height={12} />
-          <SkelBox width={28} height={28} circle />
+          <SkelBox width="60%" height={12} />
+          <SkelBox width={30} height={12} />
         </div>
       </div>
     </div>
@@ -70,6 +69,10 @@ export function BackRowSkeleton() {
       <SkelBox width={120} height={18} />
     </div>
   );
+}
+
+export function SearchSkeleton() {
+  return <SkelBox width="100%" height={42} radius="var(--r-pill)" style={{ marginBottom: 22 }} />;
 }
 
 export function LineItemSkeleton() {

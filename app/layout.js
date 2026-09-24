@@ -2,11 +2,12 @@ import { Inter } from 'next/font/google';
 import { CartProvider } from '@/components/CartContext';
 import BottomNav from '@/components/BottomNav';
 import PageTransition from '@/components/PageTransition';
+import '@flaticon/flaticon-uicons/css/brands/all.css';
 import './globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '600'],
 });
 
 export const metadata = {

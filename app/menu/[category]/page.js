@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import DishCard from '@/components/DishCard';
+import SearchBar from '@/components/SearchBar';
 import CartBar from '@/components/CartBar';
 import Reveal from '@/components/Reveal';
 import { getCategory, getItemsByCategory, categories } from '@/lib/menu-data';
@@ -24,6 +25,7 @@ export default async function CategoryPage({ params }) {
         </Link>
         <div className="h1">{category.name}</div>
       </div>
+      <SearchBar />
       <div className="grid">
         {items.map((item, i) => (
           <Reveal key={item.id} index={i}>

@@ -3,13 +3,13 @@
 import { useCart } from './CartContext';
 
 export default function TopBar() {
-  const { table } = useCart();
+  const { table, points } = useCart();
   return (
     <div className="topbar">
-      <div className="avatar">JM</div>
+      <div className="avatar">MG</div>
       <div className="who">
-        <b>Jordan M.</b>
-        <span>240 points</span>
+        <b>Muhammed El-Goharry</b>
+        <span>{points} points</span>
       </div>
       <div className="table-pill">Table #{table}</div>
     </div>

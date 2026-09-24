@@ -1,5 +1,5 @@
-import { Search } from 'lucide-react';
 import TopBar from '@/components/TopBar';
+import SearchBar from '@/components/SearchBar';
 import CategoryPills from '@/components/CategoryPills';
 import DishCard from '@/components/DishCard';
 import CartBar from '@/components/CartBar';
@@ -12,10 +12,7 @@ export default function HomePage() {
   return (
     <>
       <TopBar />
-      <div className="search">
-        <Search size={16} />
-        Search dishes, drinks…
-      </div>
+      <SearchBar />
       <div className="section-title">Our Cuisines</div>
       <CategoryPills />
       <div className="section-title">Highly Rated</div>

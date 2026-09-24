@@ -2,8 +2,9 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { CheckCircle2, Info } from 'lucide-react';
-import { useCart } from '@/components/CartContext';
+import { useCart, REVIEW_POINTS } from '@/components/CartContext';
 
 export default function ReceiptPage() {
   const { lastOrder, table } = useCart();
@@ -48,6 +49,14 @@ export default function ReceiptPage() {
           ({lastOrder.payment}) to Table #{table}.
         </span>
       </div>
+
+      <Link
+        href="/rate"
+        className="btn-primary"
+        style={{ display: 'block', textAlign: 'center', textDecoration: 'none', marginTop: 16 }}
+      >
+        Rate us · earn {REVIEW_POINTS} points
+      </Link>
     </>
   );
 }
