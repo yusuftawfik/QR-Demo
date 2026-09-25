@@ -15,6 +15,7 @@ import { usePathname } from 'next/navigation';
 export default function PageTransition({ children }) {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
+  const ref = useRef(null);
 
   // Don't animate the very first paint (it would flash blank before hydration).
   const firstRender = useRef(true);
@@ -22,8 +23,16 @@ export default function PageTransition({ children }) {
     firstRender.current = false;
   }, []);
 
+  // The document doesn't scroll any more — .app-main is the scroll container —
+  // so Next's built-in scroll-to-top on navigation has nothing to act on.
+  // Reset it ourselves so a new page always starts at the top.
+  useEffect(() => {
+    ref.current?.closest('.app-main')?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+
   return (
     <motion.div
+      ref={ref}
       key={pathname}
       initial={firstRender.current ? false : { opacity: 0, y: reduceMotion ? 0 : 6 }}
       animate={{ opacity: 1, y: 0 }}

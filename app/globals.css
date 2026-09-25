@@ -18,7 +18,7 @@
    the Figma wireframe's light background regardless of system theme. */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
+html, body { height: 100%; overflow: hidden; }
 html { scroll-padding-top: env(safe-area-inset-top, 0px); }
 /* Typography mirrors the Figma file exactly: Inter only, weight 400 everywhere
    except the table badge (600), on a 12 / 20 / 32px scale. Bold and extra-bold
@@ -28,17 +28,31 @@ b, strong { font-weight: 400; }
 button, input, textarea { font-family: inherit; font-size: inherit; font-weight: inherit; }
 a { color: inherit; }
 
+/* Site-wide focus ring: suppress the browser's default outline (the blue
+   frame Chrome draws on click) and only show a ring for keyboard focus,
+   styled to match the grayscale palette instead of default blue. More
+   specific rules below (.navlink, .star-btn, etc.) still take precedence. */
+a, button { -webkit-tap-highlight-color: transparent; }
+a:focus,
+button:focus { outline: none; }
+a:focus-visible,
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
 .app-shell {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100vh;
-  min-height: 100svh; /* svh, not dvh: dvh resizes as the mobile toolbar shows/hides and re-lays-out the page mid-scroll */
+  height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--bg);
   position: relative;
 }
-.app-main { flex: 1; padding: 20px 18px 110px; }
+/* The page itself never scrolls: .app-main is the scroll container and the nav
+   is pinned to the shell. That keeps the browser's toolbar from collapsing and
+   resizing the viewport mid-scroll, which is what made a position:fixed nav
+   jitter on real phones. Safe-area insets come from the padding on :root. */
+.app-main { flex: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; padding: 20px 18px 110px; }
 
 .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
 .avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--fill-dark); display: flex; align-items: center; justify-content: center; font-weight: 400; color: var(--ink); }
@@ -85,7 +99,7 @@ a { color: inherit; }
 .stepper b { font-size: 12px; min-width: 12px; text-align: center; }
 .stepper-overlay { position: absolute; top: -16px; right: -16px; }
 
-.cart-bar { position: sticky; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); margin-top: 20px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 400; font-size: 12px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
+.cart-bar { position: sticky; bottom: 96px; margin-top: 20px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 400; font-size: 12px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
 .cart-bar:active { transform: scale(.97); }
 
 /* Floating glass pill (Figma Frames 87/88/89: 186x38, 24px radius, 1px
@@ -94,17 +108,11 @@ a { color: inherit; }
    inner highlight. Pinned to the bottom of the viewport, centred inside the
    480px app shell. */
 .bottomnav {
-  position: fixed;
+  position: absolute; /* pinned inside .app-shell (which never scrolls), not position: fixed */
   left: 0;
   right: 0;
-  margin: 0 auto; /* centre without a transform, which can shimmy when the mobile toolbar resizes */
-  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-  /* Own compositor layer so the blur isn't repainted (and doesn't jitter)
-     while content scrolls or animates behind it. */
-  transform: translateZ(0);
-  will-change: transform;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  margin: 0 auto;
+  bottom: 14px;
   z-index: 50;
   display: flex;
   align-items: center;
@@ -117,8 +125,8 @@ a { color: inherit; }
   border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: var(--r-pill);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.18) 100%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.06), /* hairline outer edge so the glass reads on a light page */
     inset 0 1px 1px rgba(255, 255, 255, 0.9),
