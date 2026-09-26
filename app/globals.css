@@ -92,14 +92,21 @@ button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
 .icon-btn { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--bg); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .15s ease; }
 .icon-btn:active { transform: scale(.85); }
+.icon-btn:focus,
+.icon-btn:focus-visible { outline: none; }
 .icon-btn-overlay { position: absolute; top: -16px; right: -16px; }
 
 .stepper { display: flex; align-items: center; gap: 8px; background: var(--ink); color: var(--bg); border-radius: var(--r-pill); padding: 4px 8px; }
 .stepper button { background: none; border: none; color: inherit; display: flex; cursor: pointer; padding: 2px; }
+.stepper button:focus,
+.stepper button:focus-visible { outline: none; }
 .stepper b { font-size: 12px; min-width: 12px; text-align: center; }
 .stepper-overlay { position: absolute; top: -16px; right: -16px; }
 
-.cart-bar { position: sticky; bottom: 96px; margin-top: 20px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 400; font-size: 12px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
+/* Pinned directly above .bottomnav (same width, same centering, same
+   absolute-inside-.app-shell approach) instead of sitting sticky in the
+   scroll flow, so it no longer floats mid-page when content is short. */
+.cart-bar { position: absolute; left: 0; right: 0; margin: 0 auto; bottom: 86px; z-index: 40; width: min(300px, calc(100vw - 40px)); background: var(--ink); color: var(--bg); border-radius: 20px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; font-weight: 400; font-size: 12px; box-shadow: 0 14px 28px -12px rgba(0,0,0,.35); transition: transform .15s ease; }
 .cart-bar:active { transform: scale(.97); }
 
 /* Floating glass pill (Figma Frames 87/88/89: 186x38, 24px radius, 1px
